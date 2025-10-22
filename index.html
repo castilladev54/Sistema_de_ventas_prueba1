@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css">
+  <title>Conversor de Precios - Bs ↔ USD</title>
+
+</head>
+<body>
+  <div class="container">
+    <h1>💱 Gestor de Precios - Bs y USD</h1>
+
+    <div class="tasa-container">
+      <label for="tasaInput">Tasa del dólar (Bs/USD):</label>
+      <input type="number" id="tasaInput" value="36.50" min="0.01" step="0.01" />
+      <button id="actualizarBtn">Actualizar todos los precios</button>
+    </div>
+
+    <table id="tablaProductos">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Precio en Bs</th>
+          <th>Precio en USD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Los productos se cargarán aquí desde localStorage o con datos iniciales -->
+      </tbody>
+    </table>
+
+    <button class="agregar-btn" onclick="agregarProducto()">➕ Agregar producto</button>
+  </div>
+
+  <script src="main.js">
+    
+  </script>
+</body>
+</html>

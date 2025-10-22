@@ -1,0 +1,95 @@
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    .tasa-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    .tasa-container label {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    #tasaInput {
+      padding: 8px 12px;
+      font-size: 16px;
+      border: 2px solid #3498db;
+      border-radius: 6px;
+      width: 120px;
+    }
+    #actualizarBtn {
+      padding: 10px 20px;
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #actualizarBtn:hover {
+      background-color: #27ae60;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .agregar-btn {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .agregar-btn:hover {
+      background: #2980b9;
+    }
+    @media (max-width: 600px) {
+      .tasa-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      th, td {
+        padding: 8px 6px;
+        font-size: 14px;
+      }
+    }
+  
