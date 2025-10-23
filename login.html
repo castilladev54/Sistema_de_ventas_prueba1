@@ -1,58 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-  </head>
-  <body>
-    <div>
-      <header>
-        <Link to="/">
-          <img src={logo1} alt="logo" className="w-40" />
-        </Link>
-      </header>
-    <div>
-      <div>
-        <h1 >
-          Login
-        </h1>
-        <form>
-          <div>
-            <label
-            htmlFor="email"
-            >
-              Email
-            </label>
-            <input
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iniciar Sesión</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f172a; /* bg-primary equivalente (slate-900) */
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    header img {
+      width: 10rem; /* w-40 */
+    }
+
+    /* Contenedor principal del formulario */
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 5rem;
+      margin-left: 0.75rem;
+      margin-right: 0.75rem;
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 28rem; /* max-w-md */
+      padding: 1.25rem; /* p-5 */
+      background-color: rgba(255, 255, 255, 0.05); /* bg-white/5 */
+      border-radius: 0.375rem; /* rounded-md */
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+    }
+
+    .form-card h1 {
+      text-align: center;
+      font-size: 1.5rem; /* text-2xl */
+      font-weight: bold;
+      margin-bottom: 1rem; /* mb-4 */
+    }
+
+    .form-group {
+      margin-bottom: 1rem; /* space-y-4 */
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.875rem; /* text-sm */
+      font-weight: 500;
+      color: #d1d5db; /* text-gray-300 */
+      margin-bottom: 0.25rem; /* mt-1 equivalente */
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.5rem 0.75rem; /* py-2 px-3 */
+      background-color: transparent;
+      color: white;
+      border: 1px solid #374151; /* border-gray-700 */
+      border-radius: 0.375rem;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3); /* focus:ring rojo suave */
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.5rem;
+      background-color: #dc2626; /* bg-red-600 */
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .submit-btn:hover {
+      background-color: #b91c1c; /* hover:bg-red-700 */
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .signup-link {
+      text-align: center;
+      color: #9ca3af; /* text-gray-400 */
+      font-size: 0.875rem;
+      margin-top: 1.5rem; /* space-y-6 */
+    }
+
+    .signup-link a {
+      color: #ef4444; /* text-red-500 */
+      text-decoration: none;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <a href="/">
+      <!-- Reemplaza "logo1.png" con la ruta real de tu logo -->
+      <img src="logo1.png" alt="Logo" />
+    </a>
+  </header>
+
+  <!-- Formulario de login -->
+  <div class="login-container">
+    <div class="form-card">
+      <h1>Iniciar Sesión</h1>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
             type="email"
-            placeholder="you@example.com"
             id="email"
-            />
-          </div>
-          <div>
-            <label
-            htmlFor="password"
-            >
-              Contraseña
-            </label>
-            <input 
-              type="password"
-              placeholder="********"
-              id="password"
-            />
-          </div>
-          <button>
-            Entrar
-          </button>
-        </form>
-        <div >
-          Recuperar Contraseña
+            placeholder="you@example.com"
+            required
+          />
         </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="********"
+            required
+          />
+        </div>
+
+        <button type="submit" class="submit-btn" disabled>
+          Ingresar...
+        </button>
+      </form>
+
+      <div class="signup-link">
+        ¿Ya eres miembro? 
+        <a href="/signup">Registrar</a>
       </div>
     </div>
+  </div>
 
+  <!-- Opcional: script para habilitar el botón cuando se escriba -->
+  <script>
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const button = document.querySelector('.submit-btn');
 
+    const checkInputs = () => {
+      if (email.value && password.value) {
+        button.disabled = false;
+        button.textContent = 'Ingresar';
+      } else {
+        button.disabled = true;
+        button.textContent = 'Ingresar...';
+      }
+    };
 
-  </body>
+    email.addEventListener('input', checkInputs);
+    password.addEventListener('input', checkInputs);
+  </script>
+</body>
 </html>
