@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de Productos</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #111827;
+      color: white;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      background-color: #1f2937;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      max-width: 896px;
+      margin-left: auto;
+      margin-right: auto;
+      flex-wrap: wrap;
+    }
+
+    .controls label {
+      font-size: 0.875rem;
+      color: #d1d5db;
+      white-space: nowrap;
+    }
+
+    #tasaInput {
+      padding: 0.5rem;
+      width: 120px;
+      background-color: #374151;
+      border: 1px solid #4b5563;
+      border-radius: 0.375rem;
+      color: white;
+    }
+
+    #actualizarBtn,
+    #agregarFilaBtn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    #actualizarBtn {
+      background-color: #34d399;
+      color: #0f172a;
+    }
+
+    #actualizarBtn:hover {
+      background-color: #10b981;
+    }
+
+    #agregarFilaBtn {
+      background-color: #60a5fa;
+      color: white;
+    }
+
+    #agregarFilaBtn:hover {
+      background-color: #3b82f6;
+    }
+
+    .table-container {
+      max-width: 896px;
+      margin: 0 auto;
+      background-color: #1f2937;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: #374151;
+    }
+
+    th {
+      padding: 0.75rem 1.5rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #d1d5db;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tbody tr {
+      transition: background-color 0.2s;
+    }
+
+    tbody tr:hover {
+      background-color: #374151;
+    }
+
+    td {
+      padding: 1rem 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 0.4rem;
+      background-color: #374151;
+      border: 1px solid #4b5563;
+      border-radius: 0.25rem;
+      color: white;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      outline: 2px solid #34d399;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #f87171;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem;
+    }
+
+    .action-btn:hover {
+      color: #fca5a5;
+    }
+
+    .action-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Controles superiores -->
+  <div class="controls">
+    <label for="tasaInput">Tasa USD → Bs:</label>
+    <input type="number" id="tasaInput" step="0.01" placeholder="Ej. 36.50" />
+    <button id="actualizarBtn">Actualizar Precios</button>
+    <button id="agregarFilaBtn">+ Añadir Producto</button>
+  </div>
+
+  <!-- Tabla editable -->
+  <div class="table-container">
+    <table id="tablaProductos">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Precio (USD)</th>
+          <th>Precio (Bs)</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Las filas se cargarán o crearán dinámicamente -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const tasaInput = document.getElementById("tasaInput");
+    const tablaBody = document.querySelector("#tablaProductos tbody");
+    const actualizarBtn = document.getElementById("actualizarBtn");
+    const agregarFilaBtn = document.getElementById("agregarFilaBtn");
+    //searchs
+
+    const STORAGE_KEY = "gestorPreciosData";
+
+    // === FUNCIONES ===
+
+    function guardarDatos() {
+      const tasa = parseFloat(tasaInput.value);
+      if (isNaN(tasa) || tasa <= 0) return;
+
+      const productos = [];
+      const filas = tablaBody.querySelectorAll("tr");
+
+      filas.forEach((fila) => {
+        const nombre = fila.querySelector('input[type="text"]').value || "";
+        const bs = fila.querySelector(".bs").value;
+        const usd = fila.querySelector(".usd").value;
+        productos.push({ nombre, bs, usd });
+      });
+
+      const data = { tasa, productos };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function cargarDatos() {
+      const dataStr = localStorage.getItem(STORAGE_KEY);
+      if (!dataStr) return false;
+
+      try {
+        const data = JSON.parse(dataStr);
+        if (typeof data.tasa === "number" && data.tasa > 0) {
+          tasaInput.value = data.tasa;
+        }
+
+        if (Array.isArray(data.productos) && data.productos.length > 0) {
+          tablaBody.innerHTML = "";
+          data.productos.forEach((p) => {
+            agregarProducto(p.nombre || "", p.bs || "", p.usd || "");
+          });
+          return true;
+        }
+      } catch (e) {
+        console.error("Error al cargar datos:", e);
+      }
+      return false;
+    }
+
+    function actualizarProducto(fila, tasa) {
+      const bsInput = fila.querySelector(".bs");
+      const usdInput = fila.querySelector(".usd");
+
+      const bs = parseFloat(bsInput.value);
+      const usd = parseFloat(usdInput.value);
+
+      if (!isNaN(usd)) {
+        bsInput.value = (usd * tasa).toFixed(2);
+      } else if (!isNaN(bs)) {
+        usdInput.value = (bs / tasa).toFixed(2);
+      }
+    }
+
+    function actualizarTodos() {
+      const tasa = parseFloat(tasaInput.value);
+      if (isNaN(tasa) || tasa <= 0) {
+        alert("Por favor ingresa una tasa válida (mayor a 0).");
+        return;
+      }
+
+      const filas = tablaBody.querySelectorAll("tr");
+      filas.forEach((fila) => actualizarProducto(fila, tasa));
+
+      guardarDatos();
+    }
+
+    function agregarProducto(nombre = "", bs = "", usd = "") {
+      const nuevaFila = document.createElement("tr");
+      nuevaFila.innerHTML = `
+        <td><input type="text" value="${nombre.replace(/"/g, "&quot;")}" placeholder="Nombre del producto" /></td>
+        <td><input type="number" class="usd" step="0.01" value="${usd}" placeholder="0.00" /></td>
+        <td><input type="number" class="bs" step="0.01" value="${bs}" placeholder="0.00" /></td>
+        <td>
+          <button class="action-btn" title="Eliminar">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            </svg>
+          </button>
+        </td>
+      `;
+      tablaBody.appendChild(nuevaFila);
+
+      const inputs = nuevaFila.querySelectorAll("input");
+      inputs.forEach((input) => {
+        input.addEventListener("input", guardarDatos);
+      });
+
+      const deleteBtn = nuevaFila.querySelector(".action-btn");
+      deleteBtn.addEventListener("click", () => {
+        nuevaFila.remove();
+        guardarDatos();
+      });
+
+      // Enfocar el campo de nombre
+      const nombreInput = nuevaFila.querySelector('input[type="text"]');
+      nombreInput.focus();
+    }
+
+    // === EVENTOS ===
+
+    actualizarBtn.addEventListener("click", actualizarTodos);
+
+    tasaInput.addEventListener("input", () => {
+      const tasa = parseFloat(tasaInput.value);
+      if (!isNaN(tasa) && tasa > 0) {
+        actualizarTodos();
+      }
+      guardarDatos();
+    });
+
+    agregarFilaBtn.addEventListener("click", () => {
+      agregarProducto();
+    });
+
+    window.addEventListener("load", () => {
+      const hayDatos = cargarDatos();
+      if (!hayDatos) {
+        agregarProducto("Arroz 1kg", "36.50", "1.00");
+        agregarProducto("Leche 1L", "73.00", "2.00");
+      }
+    });
+
+    window.addEventListener("beforeunload", guardarDatos);
+  </script>
+</body>
+</html>

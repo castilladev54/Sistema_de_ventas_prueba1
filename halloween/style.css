@@ -1,0 +1,479 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --orange: rgb(255, 102, 0);
+  --stemlightgreen: rgb(84, 161, 84);
+  --stemdarkgreen: darkgreen;
+  --pumpkinshadeorange: rgb(245, 126, 58);
+  --pumpkindarkshadow: rgba(41, 15, 0, 0.5);
+  --ghostwhite: rgb(255, 255, 255);
+  --mainBg: rgb(20, 20, 20);
+  --pumpkineyesyellow: rgb(255, 251, 0);
+  --eyeshadow: rgb(170, 66, 6);
+}
+
+.main {
+  min-height: 100vh;
+  padding:2rem 0;
+  background: var(--mainBg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation: lighting 12s linear infinite;
+  font-family: sans-serif;
+}
+
+.ghost {
+  height: 165px;
+  width: 125px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 2.5rem;
+  transition: 0.25s ease;
+  transform: translateY(-4.5rem) translateX(-2rem);
+  opacity: 0;
+  animation: fadeinghost 1s 1s forwards, floatingghost 4s linear infinite;
+}
+
+@keyframes fadeinghost {
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes floatingghost {
+  0% {
+    transform: translateY(2.5rem) translateX(-2rem) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(3.5rem) translateX(-2rem) rotate(5deg);
+  }
+  100% {
+    transform: translateY(2.5rem) translateX(-2rem) rotate(-5deg);
+  }
+}
+
+.ghost::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ghostwhite);
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  filter: blur(10px);
+  opacity: 65%;
+}
+
+.ghost-eyes {
+  display: flex;
+  gap: 1rem;
+  z-index: 5;
+  opacity: 75%;
+}
+
+.ghost-eye {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  background: var(--mainBg);
+}
+
+@keyframes lighting {
+  0% {
+    background: var(--mainBg);
+  }
+  20% {
+    background: var(--mainBg);
+  }
+  22% {
+    background: white;
+  }
+  24% {
+    background: var(--mainBg);
+  }
+  41% {
+    background: var(--mainBg);
+  }
+  42% {
+    background: white;
+  }
+  43% {
+    background: var(--mainBg);
+  }
+  48% {
+    background: var(--mainBg);
+  }
+  49% {
+    background: white;
+  }
+  51% {
+    background: var(--mainBg);
+  }
+
+  78% {
+    background: var(--mainBg);
+  }
+  80% {
+    background: white;
+  }
+  82% {
+    background: var(--mainBg);
+  }
+  100% {
+    background: var(--mainBg);
+  }
+}
+
+.scene {
+  height: 400px;
+  width: 350px;
+  /* border: 2px solid red; */
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.pumpkin {
+  width: 90%;
+  height: 100%;
+  /* border: 1px solid yellow; */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+  transform: scaleY(0) translateY(-5rem);
+  animation: growpumpkin 2s 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes growpumpkin {
+  100% {
+    transform: scaleY(1) translateY(0rem);
+  }
+}
+
+.stem {
+  position: relative;
+  height: 100px;
+  width: 100px;
+  border-left: 32px solid var(--stemlightgreen);
+  border-top: 25px solid var(--stemlightgreen);
+  border-radius: 25%;
+  transform: translateX(35%) translateY(10.5rem) rotate(15deg);
+  animation: growstem 1s 1.5s linear forwards;
+}
+
+@keyframes growstem {
+  100% {
+    transform: translateX(35%) translateY(3.5rem) rotate(15deg);
+  }
+}
+/*use pseudo elements to mask/style our stem */
+
+.stem::after {
+  content: "";
+  position: absolute;
+  height: calc(100% + 0.65rem);
+  width: calc(100% + 1rem);
+  border-top-left-radius: 35%;
+  border-top-right-radius: 35%;
+  background: var(--mainBg);
+  left: -0.5rem;
+  top: -0.65rem;
+  transform: rotate(-3.5deg);
+  animation: lighting 12s linear infinite;
+}
+
+/* background:purple; */
+
+.stem::before {
+  content: "";
+  position: absolute;
+  height: 25px;
+  width: 45px;
+  top: -25px;
+  right: -10px;
+  z-index: 5;
+  transform: rotate(10deg);
+  background: var(--mainBg);
+  animation: lighting 12s linear infinite;
+}
+
+.stem-middle {
+  position: absolute;
+  width: 85%;
+  height: 125%;
+  z-index: 5;
+  border-left: 15px solid var(--stemdarkgreen);
+  border-top: 5px solid var(--stemdarkgreen);
+  left: -25px;
+  top: -25px;
+  border-top-left-radius: 50%;
+}
+
+.pumpkin-body {
+  height: 200px;
+  width: 100%;
+  /* border: 2px solid red; */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  perspective: 50px;
+  z-index: 5; /*ensure higher hierarchy from stem - unnecessary but safe */
+  /* border: 2px solid red; */
+}
+
+.pumpkin-face {
+  width: 50%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2rem 0;
+  /* border: 5px solid blue; */
+}
+
+.eyes {
+  display: flex;
+  height: 32.5px;
+  position: relative;
+  gap: 1rem;
+  width: 100%;
+}
+.eye {
+  flex: 1;
+  height: 100%;
+  border-bottom-left-radius: 20rem;
+  border-bottom-right-radius: 20rem;
+  position: relative;
+  box-shadow: 0px 0px 10px var(--pumpkineyesyellow),
+    0px 0px 30px var(--pumpkineyesyellow);
+  /* border: 2px solid green; */
+}
+
+.eye:first-child {
+  border-bottom: 5px solid var(--eyeshadow);
+  border-left: 10px solid var(--eyeshadow);
+  transform: rotate(15deg);
+  animation: animatelefteye 1.25s linear infinite;
+}
+
+@keyframes animatelefteye {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(25deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.eye:nth-child(2) {
+  border-bottom: 5px solid var(--eyeshadow);
+  border-right: 10px solid var(--eyeshadow);
+  transform: rotate(-15deg) translateX(0.5rem);
+  animation: animaterighteye 0.75s linear infinite;
+}
+
+@keyframes animaterighteye {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.eye::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--pumpkineyesyellow);
+  border-bottom-left-radius: 20rem;
+  border-bottom-right-radius: 20rem;
+}
+
+.mouth {
+  width: 100%;
+  height: 40px;
+  background: var(--pumpkineyesyellow);
+  border-bottom-left-radius: 20rem;
+  border-bottom-right-radius: 20rem;
+  border-bottom: 10px solid var(--eyeshadow);
+  border-left: 5px solid var(--eyeshadow);
+  border-right: 5px solid var(--eyeshadow);
+  box-shadow: 0px 0px 10px var(--pumpkineyesyellow),
+    0px 0px 30px var(--eyeglowyellow);
+  /* border-bottom:5px solid rgb(170, 66, 6); */
+  animation: animatemouth 1s linear infinite;
+}
+
+@keyframes animatemouth {
+  0% {
+    transform: scaleY(1.1) rotate(0deg);
+  }
+  50% {
+    transform: scaleY(0.65) rotate(-5deg);
+  }
+  100% {
+    transform: scaleY(1.1) rotate(0deg);
+  }
+}
+
+.pumpkin-body::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 85px;
+  background: radial-gradient(yellow 15%, var(--orange) 35%, transparent 85%);
+  bottom: -65px;
+  border-radius: 50%;
+  opacity: 25%;
+  filter: blur(20px);
+}
+
+.pumpkin-wedge {
+  width: 40%;
+  height: 100%;
+  border-radius: 45%;
+  position: absolute;
+  background: var(--orange);
+  transform: translateX(var(--offsetX)) translateZ(var(--offsetZ));
+  box-shadow: 0px -1px 10px var(--pumpkinshadeorange) inset,
+    5px -2px 2px var(--pumpkindarkshadow) inset,
+    -5px -2px 2px var(--pumpkindarkshadow) inset;
+}
+
+.halloween-caption {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white;
+  font-weight: 200;
+  transform: translateY(-5rem);
+  opacity: 0;
+  animation: lowertext 1s 2.5s forwards,
+    flickertext 4.5s 3s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+}
+
+.halloween-caption h1 {
+  font-weight: 100;
+}
+
+.big-first-letter {
+  position: relative;
+}
+
+.big-first-letter {
+  font-weight: 700;
+  font-size: 3rem;
+  position: relative;
+  text-shadow: 0px 0px 0px var(--ghostwhite);
+  animation: glowletter 1s 3s forwards;
+  /* border:  solid red; */
+}
+
+@keyframes glowletter {
+  100% {
+    text-shadow: 0px 0px 10px white;
+  }
+}
+
+.big-first-letter::after {
+  content: "H";
+  font-size: 3rem;
+  font-weight: 700;
+  position: absolute;
+  bottom: -2rem;
+  left: 0;
+  filter: blur(2px);
+  transform: rotateX(65deg) scaleY(0);
+  opacity: 0;
+  animation: showshadow 0.5s 3.5s forwards;
+}
+
+@keyframes showshadow {
+  100% {
+    opacity: 25%;
+    transform: rotateX(65deg) scaleY(1);
+  }
+}
+
+@keyframes lowertext {
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes flickertext {
+  0% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.75;
+  }
+  38% {
+    transform: scaleY(1);
+  }
+  40% {
+    transform: scaleY(1.5);
+  }
+  43% {
+    transform: scaleY(1);
+  }
+  58% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0;
+  }
+  63% {
+    opacity: 1;
+  }
+  79% {
+    opacity: 1;
+  }
+  81% {
+    opacity: 0;
+  }
+  82% {
+    opacity: 1;
+  }
+
+  90% {
+    transform: scaleX(1);
+  }
+  91% {
+    transform: scaleX(1.5);
+  }
+  94% {
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .scene {
+    transform: scale(0.65);
+  }
+}
